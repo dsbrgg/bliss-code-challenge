@@ -2,7 +2,7 @@
 var blissApp = angular.module('blissApp', [ 'ngRoute', 'ngResource', 'ngCookies' ]);
 
 blissApp.run(function($window, $rootScope, $cookies, $location) {
-    $rootScope.offset = 0;
+    $cookies.put('offset', 0);
     
     // Set events to check for internet connection constantly
     $rootScope.online = navigator.onLine;

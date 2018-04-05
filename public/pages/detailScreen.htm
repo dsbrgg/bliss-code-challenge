@@ -9,7 +9,7 @@
     </div>
     <div class="panel-body" ng-repeat="o in obj.choices">
         Programing Language : {{ o.choice }} | Votes : {{ o.votes }} 
-        <input type="button" class="btn btn-primary" style="margin-left:70px" value="Upvote" ng-click="detailChoiceUpvote(o.$$hashKey)" />
+        <input type="button" class="btn btn-primary" style="margin-left:70px" value="Upvote" ng-click="upvotes(o.$$hashKey)" />
     </div>
     <input type="button" style='float:right;margin-top:20px' value="Share" ng-click="request()"/>
 </div>

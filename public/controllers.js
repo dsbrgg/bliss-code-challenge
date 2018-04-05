@@ -21,24 +21,19 @@ blissApp.controller('statusController', ['$scope', '$location', 'blissAPI', func
 /*
     Controller for the question list
 */
-blissApp.controller('questionsController', ['$scope', '$route', '$location', 'blissAPI', 'shareService', 'detailService', function($scope, $route, $location, blissAPI, shareService, detailService) {
+blissApp.controller('questionsController', ['$scope', '$location', 'blissAPI', 'shareService', 'detailService', '$cookies', function($scope, $location, blissAPI, shareService, detailService, $cookies) {
     // Gett query string to check if URL is being used for filtering
     const search = $location.search();
     const questionFilter = search.question_filter;
     
+    var offset = $cookies.get('offset');
     var queryString = typeof questionFilter === 'string' ? questionFilter : '';
     
     // Backwards pagination
-    $scope.previous = function() {
-        $scope.offset = $scope.offset - 5;
-        $route.reload();
-    };
+    $scope.previous = function() { offset = offset - 5; };
     
-    // Forewards pagination
-    $scope.next = function() {
-        $scope.offset = $scope.offset + 5;
-        $route.reload();
-    };
+    // Forward pagination
+    $scope.next = function() { offset = offset + 5; };
     
     // Send filter from input/querystring
     $scope.submit = function() { 
@@ -60,7 +55,7 @@ blissApp.controller('questionsController', ['$scope', '$route', '$location', 'bl
     
     // API call for the question list
     var listRequest = function() {
-        var list = blissAPI.ListQuestions($scope.offset, queryString);
+        var list = blissAPI.ListQuestions(offset, queryString);
         list.$promise.then(function(response) {
             let filteredArray = response.filter(function(f){ return typeof f === 'object'; });
             $scope.responseQuestions = filteredArray;
@@ -82,7 +77,7 @@ blissApp.controller('detailsController', ['$scope', '$location', 'blissAPI', 'de
     const questionId = fullPath[fullPath.length-1];
     
     // API call for upvoting a single choice
-    var detailChoiceUpvote = function(id) {
+    var upvotes = function(id) {
         blissAPI.UpvoteChoice(id).then(function(response) {
             console.log(response);
         }).catch(function(err) {
@@ -104,12 +99,11 @@ blissApp.controller('detailsController', ['$scope', '$location', 'blissAPI', 'de
 /*
     Controller for the share screen
 */
-
 blissApp.controller('shareController', ['$scope', '$location', 'blissAPI', 'shareService', function($scope, $location, blissAPI, shareService) {
     // Set scope obj for better manipulating on the directives
     $scope.obj = shareService.obj;
     
-    // API call for the share functionality, respoding accordingly.
+    // API call for the share functionality, responding accordingly.
     $scope.request = function() {
         let post = blissAPI.Share();
     
