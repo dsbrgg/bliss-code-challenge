@@ -1,0 +1,12 @@
+<!-- Share screen to share content url --> 
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Share Question : {{ obj.question }}</h3>
+    </div>
+    <div class="panel-body">
+        Destination Email : 
+        <input type="text" ng-model="destination" />
+        <input type="button" style='float:right' value="Share" ng-click="request()"/>
+    </div>
+</div>

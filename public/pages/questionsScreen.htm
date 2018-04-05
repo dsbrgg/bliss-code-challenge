@@ -1,0 +1,19 @@
+<!-- Question list -->
+<form ng-submit="submit()">
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="filter" />
+    </div>
+    <input type="submit" class="btn btn-primary" value="Filter questions" />
+</form>  
+<hr>
+<ul class="pager">
+    <li ng-click="previous()"><a>Previous</a></li>
+    <li ng-click="next()"><a>Next</a></li>
+</ul>
+<div ng-repeat="q in responseQuestions">
+    <div class="row">
+        <div class="col-md-12">
+            <question-list item="q" share-redirect="shareRedirect(q)" detail-redirect="detailRedirect(q)"></question-list>
+        </div>
+    </div>
+</div>

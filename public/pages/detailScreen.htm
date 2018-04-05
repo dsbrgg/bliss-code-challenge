@@ -1,0 +1,15 @@
+<p>
+    <a href='#/'>Back to Question List</a>
+</p>
+<!-- "Table" of the question details -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Question : {{ obj.question }}</h3>
+        <h4>Published at : {{ obj.published_at | date : 'medium' }}</h4>
+    </div>
+    <div class="panel-body" ng-repeat="o in obj.choices">
+        Programing Language : {{ o.choice }} | Votes : {{ o.votes }} 
+        <input type="button" class="btn btn-primary" style="margin-left:70px" value="Upvote" ng-click="detailChoiceUpvote(o.$$hashKey)" />
+    </div>
+    <input type="button" style='float:right;margin-top:20px' value="Share" ng-click="request()"/>
+</div>

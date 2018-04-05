@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-us" ng-app="blissApp">
+    <head>
+        <title>Bliss Code Challenge</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta charset="UTF-8">
+
+        <!-- load bootstrap and fontawesome via CDN -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+        
+        <!-- load angular via CDN -->
+        <script src="//code.angularjs.org/1.6.9/angular.min.js"></script>
+        <script src="//code.angularjs.org/1.6.9/angular-route.min.js"></script>
+        <script src="//code.angularjs.org/1.6.9/angular-resource.min.js"></script>
+        <script src="//code.angularjs.org/1.6.9/angular-cookies.min.js"></script>
+        
+        <!-- angular app files -->
+        <script src="app.js"></script>
+        <script src="routes.js"></script>
+        <script src="services.js"></script>
+        <script src="controllers.js"></script>
+        <script src="directives.js"></script>
+    </head>
+    <body>
+
+        <header>
+			<nav class="navbar navbar-default">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">Bliss App</a>
+				</div>
+			</div>
+			</nav>
+		</header>
+
+        <div class="container">
+            <div ng-view></div>
+		</div>
+
+    </body>
+</html>

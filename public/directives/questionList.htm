@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ item.question }}</h3>
+    </div>
+    <div class="panel-body">
+        Date : {{ item.published_at | date:'medium' }}
+        <input type="button" class="btn btn-primary" style='float:right' value="Share" ng-click="shareRedirect(item)" />
+        <input type="button" class="btn btn-default" style='float:right;margin-right:10px' value="Details" ng-click="detailRedirect(item)" />
+    </div>
+</div>
