@@ -1,14 +1,18 @@
 Bliss Code Challenge ::
 
 Intro :
-    Basic angular application, feeding from the companies Mock API to test front-end habilities.
+    AngularJS 1.6.9 application for the Bliss Code Challenge. 
 
+Dependencies : 
+    Node.js
 
 Setup - 
-    1. npm start
-    2. open browser
-    3. access http://localhost:3000/
-    4. enjoy!
+    1. Install node.js
+    2. Run npm install on the root folder 
+    3. Run npm start
+    4. open browser
+    5. access http://localhost:3000/
+    6. enjoy!
     
 Thanks and I hope this is good enough!
 Have a good one.
