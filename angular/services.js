@@ -3,7 +3,7 @@
 */
 blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) {
     var self = this;
-    let url = 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com';
+    var url = 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com';
     
     // SERVER HEALTH CALL
     self.ServerHealth = function() {
@@ -14,12 +14,12 @@ blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) 
     // GET QUESTIONS LIST
     self.ListQuestions = function(offset, filter) {
         var readQuestions = $resource(url+'/:questions', { questions : 'questions' });
-        return readQuestions.query({ limit : 10, offset, filter });
+        return readQuestions.query({ limit : 10, offset : offset, filter : filter });
     };
     
     // GET QUESTION DETAIL
     self.QuestionDetails = function(id) {
-       var readDetails = $http.get(url+`/questions/${id}`);
+       var readDetails = $http.get(url+'/questions/'+id);
         
         return readDetails.then(function(response) {
             return Promise.resolve(response); 
@@ -30,7 +30,7 @@ blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) 
     
     // UPVOTE QUESTION CHOICE
      self.UpvoteChoice = function(id) {
-       var postUpvote = $http.put(url+`/questions/${id}`);
+       var postUpvote = $http.put(url+'/questions/'+id);
         
         return postUpvote.then(function(response) {
             return Promise.resolve(response); 
@@ -41,7 +41,7 @@ blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) 
     
     // SHARE URL CONTENT
     self.Share = function(destination_email, content_url) {
-        var shareQuestion = $http.post(url+`/share?${destination_email}&${content_url}`);
+        var shareQuestion = $http.post(url+'/share?'+destination_email+'&'+content_url);
         
         return shareQuestion.then(function(response) {
             return Promise.resolve(response); 

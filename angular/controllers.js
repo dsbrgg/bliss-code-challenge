@@ -9,7 +9,7 @@ blissApp.controller('statusController', ['$scope', '$location', 'blissAPI', func
         $location.path('/questions');
     }
     
-    let currentHealth = blissAPI.ServerHealth();
+    var currentHealth = blissAPI.ServerHealth();
     
     // Call API and respond accordingly
     currentHealth.$promise.then(function(health) {
@@ -30,8 +30,8 @@ blissApp.controller('statusController', ['$scope', '$location', 'blissAPI', func
 */
 blissApp.controller('questionsController', ['$scope', '$location', '$route', 'blissAPI', 'shareService', 'detailService', '$cookies', function($scope, $location, $route, blissAPI, shareService, detailService, $cookies) {
     // Gett query string to check if URL is being used for filtering
-    const search = $location.search();
-    const questionFilter = search.question_filter;
+    var search = $location.search();
+    var questionFilter = search.question_filter;
     
     // Get last page offset & querystring if any
     var offset = parseInt($cookies.get('offset'));
@@ -64,14 +64,14 @@ blissApp.controller('questionsController', ['$scope', '$location', '$route', 'bl
     // Redirect to detail screen with current object
     $scope.detailRedirect = function(obj) {
         detailService.obj = obj;
-        $location.path(`/questions/${obj.id}`);
+        $location.path('/questions/'+obj.id);
     };
     
     // API call for the question list
     var listRequest = function() {
         var list = blissAPI.ListQuestions(offset, queryString);
         list.$promise.then(function(response) {
-            let filteredArray = response.filter(function(f){ return typeof f === 'object'; });
+            var filteredArray = response.filter(function(f){ return typeof f === 'object'; });
             $scope.responseQuestions = filteredArray;
         }).catch(function(err) {
             alert(err);
@@ -86,8 +86,8 @@ blissApp.controller('questionsController', ['$scope', '$location', '$route', 'bl
 */
 blissApp.controller('detailsController', ['$scope', '$route', '$location', 'blissAPI', 'detailService', 'shareService', function($scope, $route, $location, blissAPI, detailService, shareService) {
     // Get query strings to check filtering
-    const fullPath = $location.path().split('/');
-    const questionId = fullPath[fullPath.length-1];
+    var fullPath = $location.path().split('/');
+    var questionId = fullPath[fullPath.length-1];
     
     // API call for upvoting a single choice
     $scope.upvotes = function(id) {
@@ -98,7 +98,7 @@ blissApp.controller('detailsController', ['$scope', '$route', '$location', 'blis
                 $route.reload();
             }
         }).catch(function(err) {
-            alert(`Sorry, there was an error in the request. Try again later. `, err);
+            alert('Sorry, there was an error in the request. Try again later. ', err);
         });
     };
     
@@ -128,7 +128,7 @@ blissApp.controller('shareController', ['$scope', '$location', 'blissAPI', 'shar
     
     // API call for the share functionality, responding accordingly.
     $scope.request = function() {
-        let post = blissAPI.Share();
+        var post = blissAPI.Share();
     
         post.then(function(response) {
             if(response.data.status === 'OK') {
