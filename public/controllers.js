@@ -3,11 +3,18 @@
 */
 
 blissApp.controller('statusController', ['$scope', '$location', 'blissAPI', function($scope, $location, blissAPI) {
+    // Check if health check was already done
+    if($scope.status === 'OK') {
+        console.log('teste')
+        $location.path('/questions');
+    }
+    
     let currentHealth = blissAPI.ServerHealth();
     
     // Call API and respond accordingly
     currentHealth.$promise.then(function(health) {
         if(health.status === 'OK') {
+            $scope.status = health.status;
             $location.path('/questions');
         } else {
             alert(health.status);
@@ -21,19 +28,26 @@ blissApp.controller('statusController', ['$scope', '$location', 'blissAPI', func
 /*
     Controller for the question list
 */
-blissApp.controller('questionsController', ['$scope', '$location', 'blissAPI', 'shareService', 'detailService', '$cookies', function($scope, $location, blissAPI, shareService, detailService, $cookies) {
+blissApp.controller('questionsController', ['$scope', '$location', '$route', 'blissAPI', 'shareService', 'detailService', '$cookies', function($scope, $location, $route, blissAPI, shareService, detailService, $cookies) {
     // Gett query string to check if URL is being used for filtering
     const search = $location.search();
     const questionFilter = search.question_filter;
     
-    var offset = $cookies.get('offset');
+    // Get last page offset & querystring if any
+    var offset = parseInt($cookies.get('offset'));
     var queryString = typeof questionFilter === 'string' ? questionFilter : '';
     
     // Backwards pagination
-    $scope.previous = function() { offset = offset - 5; };
+    $scope.previousPage = function() { 
+        offset = $cookies.put('offset', offset-5);
+        $route.reload();
+    };
     
     // Forward pagination
-    $scope.next = function() { offset = offset + 5; };
+    $scope.nextPage = function() { 
+        offset = $cookies.put('offset', offset+5); 
+        $route.reload();
+    };
     
     // Send filter from input/querystring
     $scope.submit = function() { 
@@ -59,7 +73,6 @@ blissApp.controller('questionsController', ['$scope', '$location', 'blissAPI', '
         list.$promise.then(function(response) {
             let filteredArray = response.filter(function(f){ return typeof f === 'object'; });
             $scope.responseQuestions = filteredArray;
-            console.log($scope.responseQuestions)
         }).catch(function(err) {
             alert(err);
         });
@@ -71,19 +84,29 @@ blissApp.controller('questionsController', ['$scope', '$location', 'blissAPI', '
 /*
     Controller for the question details screen
 */
-blissApp.controller('detailsController', ['$scope', '$location', 'blissAPI', 'detailService', 'shareService', function($scope, $location, blissAPI, detailService, shareService) {
+blissApp.controller('detailsController', ['$scope', '$route', '$location', 'blissAPI', 'detailService', 'shareService', function($scope, $route, $location, blissAPI, detailService, shareService) {
     // Get query strings to check filtering
     const fullPath = $location.path().split('/');
     const questionId = fullPath[fullPath.length-1];
     
     // API call for upvoting a single choice
-    var upvotes = function(id) {
+    $scope.upvotes = function(id) {
+        id = id.split(':')[1];
         blissAPI.UpvoteChoice(id).then(function(response) {
-            console.log(response);
+            if(response.status === 201) {
+                alert('Thanks for sharing your opinion!');
+                $route.reload();
+            }
         }).catch(function(err) {
-            console.log(err);
+            alert(`Sorry, there was an error in the request. Try again later. `, err);
         });
     };
+    
+    // Set question to $scope & go to Share Screen
+    $scope.shareQuestion = function() {
+        $scope.obj = shareService.obj;
+        $location.path('/share');
+    }
     
     // API call to get a single question detail
     var detailRequest = blissAPI.QuestionDetails(questionId);
@@ -92,7 +115,7 @@ blissApp.controller('detailsController', ['$scope', '$location', 'blissAPI', 'de
         $scope.obj = response.data;
         shareService.obj = response.data;
     }).catch(function(err) {
-        console.log(err);
+        alert('Sorry, your request could not be made. Try again later. ', err);
     });
 }]);
 
@@ -113,8 +136,7 @@ blissApp.controller('shareController', ['$scope', '$location', 'blissAPI', 'shar
                 $location.path('/questions');
             }
         }).catch(function(err) {
-            console.log(err);
-            alert(err); 
+            alert('Sorry, your request could not be made. Try again later. ', err);
         });
     }
     

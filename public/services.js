@@ -3,27 +3,25 @@
 */
 blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) {
     var self = this;
-    
-    let api;
     let url = 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com';
     
     // SERVER HEALTH CALL
     self.ServerHealth = function() {
-        api = $resource(url+'/health', {});
-        return api.get();
+        var health = $resource(url+'/health', {});
+        return health.get();
     };
     
     // GET QUESTIONS LIST
     self.ListQuestions = function(offset, filter) {
-        api = $resource(url+'/:questions', { questions : 'questions' });
-        return api.query({ limit : 10, offset, filter });
+        var readQuestions = $resource(url+'/:questions', { questions : 'questions' });
+        return readQuestions.query({ limit : 10, offset, filter });
     };
     
     // GET QUESTION DETAIL
     self.QuestionDetails = function(id) {
-       api = $http.get(url+`/questions/${id}`);
+       var readDetails = $http.get(url+`/questions/${id}`);
         
-        return api.then(function(response) {
+        return readDetails.then(function(response) {
             return Promise.resolve(response); 
         }).catch(function(err) {
             return Promise.reject(err);
@@ -32,9 +30,9 @@ blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) 
     
     // UPVOTE QUESTION CHOICE
      self.UpvoteChoice = function(id) {
-       api = $http.put(url+`/questions/${id}`);
+       var postUpvote = $http.put(url+`/questions/${id}`);
         
-        return api.then(function(response) {
+        return postUpvote.then(function(response) {
             return Promise.resolve(response); 
         }).catch(function(err) {
             return Promise.reject(err);
@@ -43,9 +41,9 @@ blissApp.service('blissAPI', [ '$resource', '$http', function($resource, $http) 
     
     // SHARE URL CONTENT
     self.Share = function(destination_email, content_url) {
-        api = $http.post(url+`/share?${destination_email}&${content_url}`);
+        var shareQuestion = $http.post(url+`/share?${destination_email}&${content_url}`);
         
-        return api.then(function(response) {
+        return shareQuestion.then(function(response) {
             return Promise.resolve(response); 
         }).catch(function(err) {
             return Promise.reject(err);
